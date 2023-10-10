@@ -1,0 +1,47 @@
+module Main where
+
+import Daml.Script
+import DA.List as L
+import DA.Map qualified as M
+import DA.Optional qualified as O
+import DA.Text qualified as T
+
+song = [("do", "a deer, a female deer"), ("re", "a drop of golden sun"), ("mi", "a name, I call myself"), ("fa", "a long long way to run")]
+
+firstNote = (L.head (drop 0 song))._1
+secondNote = (L.head (drop 1 song))._1
+thirdNote = (song !! 2)._1
+fourthNote = (song !! 3)._1
+
+notes = [firstNote, secondNote, thirdNote, fourthNote]
+lyrics = [(head song)._2, (song !! 1)._2, (song !! 2)._2, (song !! 3)._2 ]
+
+notesMap = M.fromList song
+
+problem1 = script do
+  debug $ notes
+  debug $ lyrics
+  debug $ reverse notes
+  debug $ reverse lyrics
+  debug $ notesMap
+  debug $ "-------------------------------"
+  debug $ firstNote <> ": " <> O.fromSome (M.lookup firstNote notesMap)
+  debug $ secondNote <> ": " <> O.fromSome (M.lookup secondNote notesMap)
+
+sampleText = "You are a long long way from home young man"
+
+--termFrequency: Text -> Text -> Number
+
+target = "long"
+
+sampleTextWords = T.words sampleText
+sampleTextLength = intToDecimal (L.length sampleTextWords)
+targetCount = intToDecimal (L.length (L.filter (== target) sampleTextWords))
+targetRate = targetCount / sampleTextLength
+
+
+problem2 = script do
+  debug $ sampleText
+  debug $ round targetCount
+  debug $ targetRate
+
